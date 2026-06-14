@@ -90,7 +90,7 @@ export function MyProductTable({ data, backUrl }: MyProductTableProps) {
             className='p-4 space-y-2 cursor-pointer hover:bg-muted/50 active:bg-muted transition-colors first:rounded-t-lg last:rounded-b-lg'
             onClick={() => handleRowClick(item.id)}
           >
-            {/* 상단 행 — 이미지 + 제품명 / 판매가 */}
+            {/* 상단 행 — 이미지 + 제품명 / 소비자가 */}
             <div className='flex items-center justify-between gap-3'>
               <div className='flex items-center gap-2 min-w-0'>
                 <ProductRowImage
@@ -103,7 +103,7 @@ export function MyProductTable({ data, backUrl }: MyProductTableProps) {
                 </span>
               </div>
               <span className='font-semibold text-sm flex-shrink-0'>
-                {formatPrice(item.sale_price)}
+                {formatPrice(item.consumer_price)}
               </span>
             </div>
 
