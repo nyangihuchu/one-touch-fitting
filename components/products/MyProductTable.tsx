@@ -127,8 +127,8 @@ export function MyProductTable({ data, backUrl }: MyProductTableProps) {
             <TableRow>
               <TableHead>제품명</TableHead>
               <TableHead>카테고리</TableHead>
-              <TableHead>판매가</TableHead>
               <TableHead>모델</TableHead>
+              <TableHead>판매가</TableHead>
               <TableHead>원가</TableHead>
               <TableHead>소비자가</TableHead>
               <TableHead>등록일</TableHead>
@@ -151,8 +151,8 @@ export function MyProductTable({ data, backUrl }: MyProductTableProps) {
                   </div>
                 </TableCell>
                 <TableCell>{item.category ?? '-'}</TableCell>
-                <TableCell>{formatPrice(item.sale_price)}</TableCell>
                 <TableCell>{item.model ?? '-'}</TableCell>
+                <TableCell>{formatPrice(item.sale_price)}</TableCell>
                 <TableCell>{formatPrice(item.supply_price)}</TableCell>
                 <TableCell>{formatPrice(item.consumer_price)}</TableCell>
                 <TableCell>
