@@ -29,20 +29,34 @@ function isValidHttpUrl(src: string): boolean {
 }
 
 // 썸네일 이미지 — 로드 실패 시 placeholder로 폴백
-function ProductRowImage({ src, alt }: { src: string | null; alt: string }) {
+function ProductRowImage({
+  src,
+  alt,
+  size = 40,
+}: {
+  src: string | null
+  alt: string
+  size?: number
+}) {
   const [error, setError] = useState(false)
 
   if (!src || !isValidHttpUrl(src) || error) {
-    return <div className='h-10 w-10 flex-shrink-0 rounded bg-muted' />
+    return (
+      <div
+        className='flex-shrink-0 rounded bg-muted'
+        style={{ width: size, height: size }}
+      />
+    )
   }
 
   return (
     <Image
       src={src}
       alt={alt}
-      width={40}
-      height={40}
-      className='h-10 w-10 flex-shrink-0 rounded object-cover'
+      width={size}
+      height={size}
+      className='flex-shrink-0 rounded object-cover'
+      style={{ width: size, height: size }}
       onError={() => setError(true)}
     />
   )
@@ -67,54 +81,88 @@ export function MyProductTable({ data, backUrl }: MyProductTableProps) {
   }
 
   return (
-    /* 모바일에서 테이블 가로 스크롤 허용 */
-    <div className='w-full overflow-x-auto'>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {/* 항상 표시 */}
-            <TableHead>제품명</TableHead>
-            <TableHead>카테고리</TableHead>
-            <TableHead>판매가</TableHead>
-            {/* sm(640px) 이상만 표시 */}
-            <TableHead className='hidden sm:table-cell'>모델</TableHead>
-            <TableHead className='hidden sm:table-cell'>원가</TableHead>
-            {/* md(768px) 이상만 표시 */}
-            <TableHead className='hidden md:table-cell'>소비자가</TableHead>
-            <TableHead className='hidden md:table-cell'>등록일</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((item) => (
-            <TableRow
-              key={item.id}
-              className='cursor-pointer hover:bg-muted/50'
-              onClick={() => handleRowClick(item.id)}
-            >
-              {/* 항상 표시 */}
-              <TableCell>
-                <div className='flex items-center gap-3'>
-                  <ProductRowImage
-                    src={getProductImageUrl(item.image_path)}
-                    alt={item.product_name ?? '제품 이미지'}
-                  />
-                  <span className='font-medium'>{item.product_name ?? '-'}</span>
-                </div>
-              </TableCell>
-              <TableCell>{item.category ?? '-'}</TableCell>
-              <TableCell>{formatPrice(item.sale_price)}</TableCell>
-              {/* sm(640px) 이상만 표시 */}
-              <TableCell className='hidden sm:table-cell'>{item.model ?? '-'}</TableCell>
-              <TableCell className='hidden sm:table-cell'>{formatPrice(item.supply_price)}</TableCell>
-              {/* md(768px) 이상만 표시 */}
-              <TableCell className='hidden md:table-cell'>{formatPrice(item.consumer_price)}</TableCell>
-              <TableCell className='hidden md:table-cell'>
-                {item.created_at ? item.created_at.slice(0, 10) : '-'}
-              </TableCell>
+    <>
+      {/* 모바일 카드 목록 — sm(640px) 미만에서만 표시 */}
+      <div className='divide-y border rounded-lg sm:hidden'>
+        {data.map((item) => (
+          <div
+            key={item.id}
+            className='p-4 space-y-2 cursor-pointer hover:bg-muted/50 active:bg-muted transition-colors first:rounded-t-lg last:rounded-b-lg'
+            onClick={() => handleRowClick(item.id)}
+          >
+            {/* 상단 행 — 이미지 + 제품명 / 판매가 */}
+            <div className='flex items-center justify-between gap-3'>
+              <div className='flex items-center gap-2 min-w-0'>
+                <ProductRowImage
+                  src={getProductImageUrl(item.image_path)}
+                  alt={item.product_name ?? '제품 이미지'}
+                  size={32}
+                />
+                <span className='font-medium text-sm truncate'>
+                  {item.product_name ?? '-'}
+                </span>
+              </div>
+              <span className='font-semibold text-sm flex-shrink-0'>
+                {formatPrice(item.sale_price)}
+              </span>
+            </div>
+
+            {/* 하단 행 — 카테고리 / 모델 */}
+            <div className='flex items-center justify-between'>
+              <span className='text-xs text-muted-foreground'>
+                {item.category ?? '-'}
+              </span>
+              <span className='text-xs text-muted-foreground text-right'>
+                {item.model ?? '-'}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* 데스크톱 테이블 — sm(640px) 이상에서만 표시 */}
+      <div className='hidden sm:block w-full overflow-x-auto'>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>제품명</TableHead>
+              <TableHead>카테고리</TableHead>
+              <TableHead>판매가</TableHead>
+              <TableHead>모델</TableHead>
+              <TableHead>원가</TableHead>
+              <TableHead>소비자가</TableHead>
+              <TableHead>등록일</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {data.map((item) => (
+              <TableRow
+                key={item.id}
+                className='cursor-pointer hover:bg-muted/50'
+                onClick={() => handleRowClick(item.id)}
+              >
+                <TableCell>
+                  <div className='flex items-center gap-3'>
+                    <ProductRowImage
+                      src={getProductImageUrl(item.image_path)}
+                      alt={item.product_name ?? '제품 이미지'}
+                    />
+                    <span className='font-medium'>{item.product_name ?? '-'}</span>
+                  </div>
+                </TableCell>
+                <TableCell>{item.category ?? '-'}</TableCell>
+                <TableCell>{formatPrice(item.sale_price)}</TableCell>
+                <TableCell>{item.model ?? '-'}</TableCell>
+                <TableCell>{formatPrice(item.supply_price)}</TableCell>
+                <TableCell>{formatPrice(item.consumer_price)}</TableCell>
+                <TableCell>
+                  {item.created_at ? item.created_at.slice(0, 10) : '-'}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </>
   )
 }
