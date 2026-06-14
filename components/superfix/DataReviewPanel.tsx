@@ -156,7 +156,7 @@ export function DataReviewPanel({ productJsonList, onConfirm }: DataReviewPanelP
           onClick={handleConfirm}
           disabled={showErrors && !allValid}
           className={cn(
-            'self-end rounded-md px-5 py-2 text-sm font-semibold transition-colors',
+            'w-full rounded-md px-5 py-2 text-sm font-semibold transition-colors sm:w-auto sm:self-end',
             allValid
               ? 'bg-foreground text-background hover:bg-foreground/80'
               : 'cursor-not-allowed bg-muted text-muted-foreground'
@@ -192,7 +192,7 @@ export function DataReviewPanel({ productJsonList, onConfirm }: DataReviewPanelP
         onClick={handleConfirm}
         disabled={showErrors && !allValid}
         className={cn(
-          'self-end rounded-md px-5 py-2 text-sm font-semibold transition-colors',
+          'w-full rounded-md px-5 py-2 text-sm font-semibold transition-colors sm:w-auto sm:self-end',
           allValid
             ? 'bg-foreground text-background hover:bg-foreground/80'
             : 'cursor-not-allowed bg-muted text-muted-foreground'

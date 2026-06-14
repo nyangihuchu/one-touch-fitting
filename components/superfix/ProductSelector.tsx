@@ -184,8 +184,8 @@ export function ProductSelector({ onSelectionChange }: ProductSelectorProps) {
         />
       </div>
 
-      {/* 상단 컨트롤 바 */}
-      <div className='flex items-center justify-between'>
+      {/* 상단 컨트롤 바 — 모바일에서 두 줄, sm 이상에서 한 줄 */}
+      <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
         <div className='flex items-center gap-3'>
           <button
             onClick={handleSelectAll}
@@ -202,8 +202,8 @@ export function ProductSelector({ onSelectionChange }: ProductSelectorProps) {
           </button>
         </div>
 
-        {/* 총 건수 및 선택 현황 */}
-        <div className='flex items-center gap-2 text-sm'>
+        {/* 총 건수 및 선택 현황 — 모바일에서 xs 크기로 줄여 공간 절약 */}
+        <div className='flex items-center gap-2 text-xs sm:text-sm'>
           {!loading && totalCount > 0 && (
             <span className='text-muted-foreground'>
               총 {totalCount.toLocaleString()}건 ({rangeFrom}-{rangeTo})
@@ -291,9 +291,10 @@ export function ProductSelector({ onSelectionChange }: ProductSelectorProps) {
           </p>
           <ul className='flex flex-col gap-1'>
             {selectedProducts.map((p) => (
-              <li key={p.id} className='flex items-center justify-between text-sm'>
-                <span className='font-medium'>{p.product_name ?? '-'}</span>
-                <span className='text-muted-foreground'>{p.model ?? '-'}</span>
+              /* min-w-0으로 flex 자식 요소 텍스트 넘침 방지 */
+              <li key={p.id} className='flex min-w-0 items-center justify-between gap-2 text-sm'>
+                <span className='min-w-0 truncate font-medium'>{p.product_name ?? '-'}</span>
+                <span className='flex-shrink-0 text-muted-foreground'>{p.model ?? '-'}</span>
               </li>
             ))}
           </ul>
