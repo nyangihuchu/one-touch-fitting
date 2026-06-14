@@ -45,10 +45,13 @@ export async function MyContent({
         <p className='mt-1 text-sm text-muted-foreground'>총 {count}건</p>
       </div>
 
-      <div className='flex flex-wrap gap-2'>
-        <Suspense>
-          <ProductSearch />
-        </Suspense>
+      {/* 필터 바 — 모바일 세로 정렬, sm 이상에서 가로 정렬 */}
+      <div className='flex flex-col gap-2 sm:flex-row sm:flex-wrap'>
+        <div className='w-full sm:w-auto'>
+          <Suspense>
+            <ProductSearch />
+          </Suspense>
+        </div>
         <Suspense>
           <ProductFilter label='카테고리' options={filterOptions.categories} paramKey='category' />
         </Suspense>

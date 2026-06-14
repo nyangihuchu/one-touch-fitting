@@ -48,7 +48,7 @@ export function ProductSearch() {
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           placeholder='제품명 또는 모델 검색'
-          className='w-56'
+          className='w-full sm:w-56'
         />
         <Button variant='outline' size='icon' onClick={handleSearch}>
           <Search />

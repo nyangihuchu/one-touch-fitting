@@ -35,7 +35,7 @@ export function ProductFilter({ label, options, paramKey }: ProductFilterProps) 
 
   return (
     <Select value={current} onValueChange={handleChange}>
-      <SelectTrigger className='w-40'>
+      <SelectTrigger className='w-full sm:w-40'>
         <SelectValue placeholder={label} />
       </SelectTrigger>
       <SelectContent>

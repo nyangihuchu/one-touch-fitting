@@ -51,12 +51,14 @@ export async function ResearchContent({
 
   const totalPages = calcTotalPages(count, PAGE_SIZE)
 
-  // 공통 필터 UI
+  // 공통 필터 UI — 모바일 세로 정렬, sm 이상에서 가로 정렬
   const filterBar = (
-    <div className='flex flex-wrap gap-2'>
-      <Suspense>
-        <ProductSearch />
-      </Suspense>
+    <div className='flex flex-col gap-2 sm:flex-row sm:flex-wrap'>
+      <div className='w-full sm:w-auto'>
+        <Suspense>
+          <ProductSearch />
+        </Suspense>
+      </div>
       <Suspense>
         <ProductFilter label='카테고리' options={filterOptions.categories} paramKey='category' />
       </Suspense>
