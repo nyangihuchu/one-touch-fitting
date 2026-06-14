@@ -212,7 +212,7 @@ export function FittingGuideContent() {
                     </span>
                   ))}
                 </div>
-                <p className='text-xs text-muted-foreground'>정수기 호스는 대부분 1/4" 사용</p>
+                <p className='text-xs text-muted-foreground'>정수기 호스는 대부분 1/4&quot; 사용</p>
               </div>
             </div>
           </div>
