@@ -8,14 +8,43 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+const REMEMBER_EMAIL_KEY = 'otf_remember_email'
+const REMEMBER_FLAG_KEY = 'otf_auto_login'
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isChecking, setIsChecking] = useState(true)
   const router = useRouter()
+
+  useEffect(() => {
+    const init = async () => {
+      const supabase = createClient()
+
+      // 이미 로그인된 세션이 있으면 제품 페이지로 자동 이동
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        router.replace('/products/research')
+        return
+      }
+
+      // 저장된 이메일 및 자동 로그인 설정 불러오기
+      const savedFlag = localStorage.getItem(REMEMBER_FLAG_KEY)
+      const savedEmail = localStorage.getItem(REMEMBER_EMAIL_KEY)
+      if (savedFlag === 'true' && savedEmail) {
+        setEmail(savedEmail)
+        setRememberMe(true)
+      }
+
+      setIsChecking(false)
+    }
+    init()
+  }, [router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,15 +53,20 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     setError(null)
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw error
-      // 로그인 성공 시 제품 리서치 페이지로 이동
+
+      // 자동 로그인 체크 여부에 따라 이메일 저장 또는 삭제
+      if (rememberMe) {
+        localStorage.setItem(REMEMBER_FLAG_KEY, 'true')
+        localStorage.setItem(REMEMBER_EMAIL_KEY, email)
+      } else {
+        localStorage.removeItem(REMEMBER_FLAG_KEY)
+        localStorage.removeItem(REMEMBER_EMAIL_KEY)
+      }
+
       router.push('/products/research')
     } catch (error: unknown) {
-      // 오류 메시지 한국어로 표시
       if (error instanceof Error) {
         const msg = error.message
         if (msg.includes('Invalid login credentials')) {
@@ -49,6 +83,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       setIsLoading(false)
     }
   }
+
+  // 세션 확인 중에는 빈 화면 (깜빡임 방지)
+  if (isChecking) return null
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
@@ -88,6 +125,18 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+              </div>
+              <div className='flex items-center gap-2'>
+                <input
+                  id='remember-me'
+                  type='checkbox'
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className='h-4 w-4 rounded border-input accent-primary cursor-pointer'
+                />
+                <Label htmlFor='remember-me' className='cursor-pointer font-normal'>
+                  자동 로그인
+                </Label>
               </div>
               {error && <p className='text-sm text-red-500'>{error}</p>}
               <Button type='submit' className='w-full' disabled={isLoading}>
