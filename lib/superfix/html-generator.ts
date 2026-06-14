@@ -3,31 +3,35 @@ import {
   renderHeroSection,
   renderFeaturesSection,
   renderSpecificationSection,
-  renderDimensionSection,
   renderUsageSection,
   renderCheckBeforeBuySection,
   renderOptionTableSection,
   renderFooterSection,
 } from '@/lib/superfix/templates/detail-page'
+import { generateBTypeSections } from '@/lib/superfix/templates/detail-page-b'
 
 export interface GenerateOptions {
   embedImages?: boolean
+  templateType?: 'A' | 'B'
 }
 
 export async function generateDetailPageHTML(
   data: DetailPageData,
   options: GenerateOptions = {}
 ): Promise<string> {
-  const sections = [
-    renderHeroSection(data),
-    renderFeaturesSection(data),
-    renderSpecificationSection(data),
-    renderDimensionSection(data),
-    renderUsageSection(data),
-    renderCheckBeforeBuySection(data),
-    renderOptionTableSection(data),
-    renderFooterSection(data),
-  ].join('')
+  const { templateType = 'A' } = options
+
+  const sections = templateType === 'B'
+    ? generateBTypeSections(data)
+    : [
+        renderHeroSection(data),
+        renderFeaturesSection(data),
+        renderSpecificationSection(data),
+        renderUsageSection(data),
+        renderCheckBeforeBuySection(data),
+        renderOptionTableSection(data),
+        renderFooterSection(data),
+      ].join('')
 
   let html = wrapDocument(sections)
 

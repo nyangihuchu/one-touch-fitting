@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getMyProductById } from '@/lib/supabase/server'
-import { formatPrice } from '@/lib/products/utils'
+import { formatPrice, getProductImageUrl } from '@/lib/products/utils'
+import { DimensionDiagram } from '@/components/products/DimensionDiagram'
 
 function isValidHttpUrl(src: string): boolean {
   try {
@@ -129,6 +130,12 @@ export async function ProductDetailContent({
           </div>
         </div>
       </div>
+
+      <DimensionDiagram
+        imageSrc={getProductImageUrl(product.image_path ?? null)}
+        tubeSpec={product.tube_spec}
+        threadSpec={product.thread_spec}
+      />
 
       {product.summary_description && (
         <section className='space-y-3 rounded-lg border p-5'>

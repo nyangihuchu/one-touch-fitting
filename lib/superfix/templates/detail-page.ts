@@ -184,12 +184,57 @@ export function renderSpecificationSection(data: DetailPageData): string {
   const hasDimension = !!(product.tubeSize || product.threadSize)
   const imgUrl = safeUrl(product.mainImage)
 
+  // 외형 치수도 오버레이: 실사 사진 + SVG 치수선
+  function buildDimensionOverlay(): string {
+    const tube = product.tubeSize ? `Ø${esc(product.tubeSize)}` : ''
+    const thread = product.threadSize ? esc(product.threadSize) : ''
+    const imageBlock = imgUrl
+      ? `<img src="${imgUrl}" alt="외형 치수도" style="position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;object-fit:contain;"/>`
+      : `<div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:${C.textLight};">이미지 없음</div>`
+    const topAnno = tube ? `
+      <line x1="152" y1="24" x2="152" y2="45" stroke="${C.text}" stroke-width="1"/>
+      <line x1="248" y1="24" x2="248" y2="45" stroke="${C.text}" stroke-width="1"/>
+      <line x1="164" y1="35" x2="236" y2="35" stroke="${C.text}" stroke-width="1.5"/>
+      <polygon points="152,35 165,29 165,41" fill="${C.text}"/>
+      <polygon points="248,35 235,29 235,41" fill="${C.text}"/>
+      <rect x="155" y="6" width="90" height="18" fill="white" fill-opacity="0.88"/>
+      <text x="200" y="19" text-anchor="middle" font-size="14" font-weight="700" font-family="Arial,sans-serif" fill="${C.text}">${tube}</text>` : ''
+    const botAnno = thread ? `
+      <line x1="120" y1="240" x2="120" y2="261" stroke="${C.text}" stroke-width="1"/>
+      <line x1="280" y1="240" x2="280" y2="261" stroke="${C.text}" stroke-width="1"/>
+      <line x1="133" y1="251" x2="267" y2="251" stroke="${C.text}" stroke-width="1.5"/>
+      <polygon points="120,251 133,245 133,257" fill="${C.text}"/>
+      <polygon points="280,251 267,245 267,257" fill="${C.text}"/>
+      <rect x="130" y="264" width="140" height="18" fill="white" fill-opacity="0.88"/>
+      <text x="200" y="277" text-anchor="middle" font-size="14" font-weight="700" font-family="Arial,sans-serif" fill="${C.text}">${thread}</text>` : ''
+    return `<div style="position:relative;width:100%;height:290px;background:#fff;overflow:hidden;">
+  ${imageBlock}
+  <svg style="position:absolute;top:0;left:0;width:100%;height:100%;" viewBox="0 0 400 290" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    ${topAnno}${botAnno}
+    <text x="392" y="287" text-anchor="end" font-size="9" fill="${C.textLight}" font-family="Arial,sans-serif">단위 : mm</text>
+  </svg>
+</div>`
+  }
+
   let dimensionPanel: string
   if (hasDimension) {
-    // 규격 데이터가 있으면 SVG 치수도 우선 표시
-    dimensionPanel = `<div style="background:${C.white};border-radius:8px;border:1px solid ${C.border};overflow:hidden;display:flex;flex-direction:column;">
+    if (imgUrl) {
+      // 실사 사진 + 치수선 오버레이
+      dimensionPanel = `<div style="background:${C.white};border-radius:8px;border:1px solid ${C.border};overflow:hidden;display:flex;flex-direction:column;">
     <div style="background:${C.navy};padding:11px 16px;">
-      <span style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:2px;font-weight:700;">DIMENSION</span>
+      <span style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:2px;font-weight:700;">외형 치수도</span>
+    </div>
+    ${buildDimensionOverlay()}
+    <div style="padding:10px 16px;background:${C.gray};border-top:1px solid ${C.border};display:flex;justify-content:center;gap:24px;">
+      ${product.tubeSize ? `<span style="font-size:11px;color:${C.textLight};">튜브 <strong style="color:${C.navy};font-weight:700;">${esc(product.tubeSize)}</strong></span>` : ''}
+      ${product.threadSize ? `<span style="font-size:11px;color:${C.textLight};">나사 <strong style="color:${C.navy};font-weight:700;">${esc(product.threadSize)}</strong></span>` : ''}
+    </div>
+  </div>`
+    } else {
+      // 이미지 없으면 SVG 단면도 폴백
+      dimensionPanel = `<div style="background:${C.white};border-radius:8px;border:1px solid ${C.border};overflow:hidden;display:flex;flex-direction:column;">
+    <div style="background:${C.navy};padding:11px 16px;">
+      <span style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:2px;font-weight:700;">외형 치수도</span>
     </div>
     <div style="flex:1;padding:12px 16px;display:flex;align-items:center;justify-content:center;">
       ${renderFittingDiagramSVG(product.tubeSize || '', product.threadSize || '')}
@@ -199,6 +244,7 @@ export function renderSpecificationSection(data: DetailPageData): string {
       ${product.threadSize ? `<span style="font-size:11px;color:${C.textLight};">나사 <strong style="color:${C.navy};font-weight:700;">${esc(product.threadSize)}</strong></span>` : ''}
     </div>
   </div>`
+    }
   } else if (imgUrl) {
     // 규격 없고 이미지 있으면 제품 이미지 표시
     dimensionPanel = `<div style="background:${C.white};border-radius:8px;border:1px solid ${C.border};overflow:hidden;display:flex;flex-direction:column;">
@@ -232,7 +278,7 @@ export function renderSpecificationSection(data: DetailPageData): string {
 </div>`
 }
 
-// renderSpecificationSection에 통합 — html-generator.ts 호환을 위해 유지
+// 외형 치수도는 renderSpecificationSection 우측 패널에 통합됨
 export function renderDimensionSection(_data: DetailPageData): string {
   return ''
 }

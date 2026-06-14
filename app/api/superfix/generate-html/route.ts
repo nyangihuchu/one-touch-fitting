@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: '인증이 필요합니다.' }, { status: 401 })
   }
 
-  let body: { data?: DetailPageData }
+  let body: { data?: DetailPageData; templateType?: 'A' | 'B' }
   try {
     body = await request.json()
   } catch {
@@ -23,7 +23,9 @@ export async function POST(request: Request) {
   }
 
   try {
-    const html = await generateDetailPageHTML(body.data)
+    const html = await generateDetailPageHTML(body.data, {
+      templateType: body.templateType ?? 'A',
+    })
     return NextResponse.json({ html })
   } catch (error) {
     console.error('[generate-html] HTML 생성 오류:', error)
