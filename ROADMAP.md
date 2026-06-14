@@ -32,8 +32,8 @@
 |-------|---------|------|--------|
 | Phase 1: DB 세팅 | 5 | 5 | 100% |
 | Phase 2: Research 제품 페이지 | 4 | 4 | 100% |
-| Phase 3: My 제품 페이지 | 4 | 4 | 100% |
-| **전체** | **13** | **13** | **100%** |
+| Phase 3: My 제품 페이지 | 5 | 5 | 100% |
+| **전체** | **14** | **14** | **100%** |
 
 ---
 
@@ -413,6 +413,32 @@
 - 모든 사용자 플로우 정상 동작
 - 빌드 및 린트 오류 없음
 - Vercel 배포 성공 및 운영 URL에서 정상 접근 확인
+
+---
+
+#### ✅ Task 014: 피팅 가이드 페이지 구현
+
+- 관련 파일: `app/products/guide/page.tsx` (신규), `app/products/guide/_content.tsx` (신규), `app/products/guide/_image.tsx` (신규), `components/products/ProductNav.tsx`, `next.config.ts`
+- 소요 시간: 반나절
+
+**구현 사항**
+
+- `/products/guide` 라우트 신규 생성 (정적 Server Component)
+- `ProductNav`에 "피팅 가이드" 탭 추가
+- 5개 섹션으로 구성된 초보자용 가이드 콘텐츠:
+  - 원터치 피팅 개요 (정의 + 3대 특징 카드)
+  - 주요 형태별 종류 (PC/PL/PT·PST/PY/PUC — 상아뉴매틱 기준 모델명 + 제품 사진)
+  - 규격 및 사이즈 선택법 (호스 외경 mm/인치, 나사산 규격 표, 모델명 읽기 예시)
+  - 온라인 마켓 인기 구성 (네이버스토어·쿠팡 트렌드 기반 TOP 5)
+  - 초보자 선택 4단계 (외경 → 포트 규격 → 형태 → 재질)
+- 상아뉴매틱 공식 이미지 사용을 위해 `next.config.ts`에 `www.sanga2000.com` 도메인 추가
+- 이미지 로드 실패 시 placeholder 처리용 `ShapeImage` 클라이언트 컴포넌트 추가
+
+**수락 기준**
+
+- `/products/guide` 접근 시 5개 섹션 정상 표시
+- 형태별 카드에 제품 사진 표시 (에러 시 placeholder 표시)
+- `npm run build` 오류 없음
 
 ---
 
