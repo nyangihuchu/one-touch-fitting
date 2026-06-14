@@ -5,13 +5,13 @@ export default function ProductsLayout({ children }: { children: React.ReactNode
   return (
     <div className='flex min-h-screen flex-col'>
       <header className='border-b'>
-        <div className='mx-auto flex h-14 w-full max-w-7xl items-center px-6'>
+        <div className='mx-auto flex h-14 w-full max-w-7xl items-center px-4 sm:px-6'>
           <Suspense fallback={null}>
             <ProductNav />
           </Suspense>
         </div>
       </header>
-      <main className='mx-auto w-full max-w-7xl flex-1 p-6'>{children}</main>
+      <main className='mx-auto w-full max-w-7xl flex-1 p-4 sm:p-6'>{children}</main>
     </div>
   )
 }
