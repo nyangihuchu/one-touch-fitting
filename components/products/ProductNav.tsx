@@ -12,6 +12,7 @@ const navItems = [
   { href: '/products/research', label: 'Research 제품' },
   { href: '/products/my', label: 'My 제품' },
   { href: '/products/guide', label: '피팅 가이드' },
+  { href: '/superfix', label: '상세페이지 생성' },
 ]
 
 export function ProductNav() {
