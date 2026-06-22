@@ -30,27 +30,27 @@ export async function CardNewsDashboardContent() {
         <StatCard
           title='총 상품 수'
           value={total.toLocaleString()}
-          description='my_products 전체 등록 상품'
+          description='전체 등록 상품'
           icon={Package}
         />
         <StatCard
-          title='이미지 보유 수'
+          title='이미지 보유'
           value={withImage.toLocaleString()}
-          description='image_path가 있는 상품'
+          description='이미지 있는 상품'
           icon={Image}
           variant='success'
         />
         <StatCard
-          title='이미지 누락 수'
+          title='이미지 누락'
           value={withoutImage.toLocaleString()}
-          description='이미지가 없는 상품'
+          description='이미지 없는 상품'
           icon={ImageOff}
           variant='warning'
         />
         <StatCard
           title='이미지 보유율'
           value={`${imageRate}%`}
-          description='전체 대비 이미지 보유 비율'
+          description='전체 대비 보유 비율'
           icon={BarChart3}
           variant={imageRate >= 80 ? 'success' : 'warning'}
         />

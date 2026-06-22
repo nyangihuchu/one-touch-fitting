@@ -6,12 +6,12 @@ import { LayoutDashboard, Package, Image, Layers, Download, Settings } from 'luc
 import { cn } from '@/lib/utils'
 
 const navItems = [
-  { href: '/cardnews/dashboard', label: '대시보드', icon: LayoutDashboard },
-  { href: '/cardnews/products', label: '상품 관리', icon: Package },
-  { href: '/cardnews/images', label: '이미지', icon: Image },
-  { href: '/cardnews/generate', label: '생성', icon: Layers },
-  { href: '/cardnews/download', label: '다운로드', icon: Download },
-  { href: '/cardnews/settings', label: '설정', icon: Settings },
+  { href: '/cardnews/dashboard', label: '대시보드', shortLabel: '홈', icon: LayoutDashboard },
+  { href: '/cardnews/products', label: '상품 관리', shortLabel: '상품', icon: Package },
+  { href: '/cardnews/images', label: '이미지 현황', shortLabel: '이미지', icon: Image },
+  { href: '/cardnews/generate', label: '카드뉴스 생성', shortLabel: '생성', icon: Layers },
+  { href: '/cardnews/download', label: '다운로드', shortLabel: '다운로드', icon: Download },
+  { href: '/cardnews/settings', label: '브랜드 설정', shortLabel: '설정', icon: Settings },
 ]
 
 export function CardNewsSidebar() {
@@ -19,7 +19,7 @@ export function CardNewsSidebar() {
 
   return (
     <>
-      {/* 데스크톱: 좌측 사이드바 (md 이상에서만 표시) */}
+      {/* 데스크톱: 좌측 사이드바 */}
       <aside className='hidden md:flex flex-col w-56 border-r shrink-0'>
         <nav className='flex flex-col gap-1 p-3'>
           {navItems.map(({ href, label, icon: Icon }) => (
@@ -40,34 +40,28 @@ export function CardNewsSidebar() {
         </nav>
       </aside>
 
-      {/* 모바일: 하단 고정 탭 바 (md 미만에서만 표시) */}
+      {/* 모바일: 하단 고정 탭 바 */}
       <nav
-        className='fixed bottom-0 left-0 right-0 z-50 flex h-16 items-stretch border-t bg-background md:hidden'
+        className='fixed bottom-0 left-0 right-0 z-50 flex h-16 border-t bg-background md:hidden'
         aria-label='카드뉴스 하단 네비게이션'
       >
-        {navItems.map(({ href, label, icon: Icon }) => {
+        {navItems.map(({ href, shortLabel, icon: Icon }) => {
           const isActive = pathname.startsWith(href)
           return (
             <Link
               key={href}
               href={href}
               className={cn(
-                'flex flex-1 flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors',
-                isActive
-                  ? 'text-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
+                'relative flex flex-1 flex-col items-center justify-center gap-1 text-xs font-medium transition-colors',
+                isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
               )}
               aria-current={isActive ? 'page' : undefined}
             >
-              {/* 활성 탭 상단 인디케이터 */}
-              <span
-                className={cn(
-                  'absolute top-0 h-0.5 w-8 rounded-full transition-colors',
-                  isActive ? 'bg-foreground' : 'bg-transparent'
-                )}
-              />
+              {isActive && (
+                <span className='absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-foreground' />
+              )}
               <Icon className='h-5 w-5 shrink-0' />
-              <span className='leading-none'>{label}</span>
+              <span className='leading-none'>{shortLabel}</span>
             </Link>
           )
         })}
