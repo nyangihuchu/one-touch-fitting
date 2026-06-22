@@ -15,7 +15,7 @@ export default function CardNewsLayout({ children }: { children: React.ReactNode
       <div className='mx-auto flex w-full max-w-7xl flex-1'>
         <CardNewsSidebar />
         {/* 모바일에서 하단 탭 바(h-16) 높이만큼 패딩 추가 */}
-        <main className='flex-1 p-4 pb-20 sm:p-6 md:pb-6'>{children}</main>
+        <main className='flex-1 min-w-0 p-4 pb-20 sm:p-6 md:pb-6'>{children}</main>
       </div>
     </div>
   )
