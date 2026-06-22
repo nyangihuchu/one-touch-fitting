@@ -31,22 +31,6 @@ function Slide0({ slide, product, brandColor }: Omit<SlideTypeCProps, 'totalSlid
         }}
       />
       <div style={{ position: 'relative', padding: '72px 64px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <div
-          style={{
-            display: 'inline-block',
-            backgroundColor: brandColor,
-            color: '#fff',
-            fontSize: 20,
-            fontWeight: 600,
-            padding: '6px 16px',
-            borderRadius: 4,
-            marginBottom: 24,
-            letterSpacing: 1,
-            alignSelf: 'flex-start',
-          }}
-        >
-          제품 소개형 · TYPE C
-        </div>
         <div style={{ color: '#0f172a', fontSize: 52, fontWeight: 800, lineHeight: 1.2, marginBottom: 16 }}>
           {lines[0] || product.product_name || slide.title}
         </div>
@@ -337,21 +321,6 @@ function Slide4({ slide, brandColor }: Omit<SlideTypeCProps, 'totalSlides'>) {
             {line}
           </div>
         ))}
-        <div
-          style={{
-            marginTop: 48,
-            backgroundColor: brandColor,
-            color: '#fff',
-            fontSize: 26,
-            fontWeight: 700,
-            padding: '20px 56px',
-            borderRadius: 50,
-            display: 'inline-block',
-          }}
-        >
-          SUPERFIX 공압몰 바로가기 →
-        </div>
-
         {/* URL 정보 */}
         <div
           style={{
@@ -359,23 +328,37 @@ function Slide4({ slide, brandColor }: Omit<SlideTypeCProps, 'totalSlides'>) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: 14,
+            gap: 16,
           }}
         >
           <div
             style={{
-              width: 48,
-              height: 2,
               backgroundColor: brandColor,
-              opacity: 0.3,
-              marginBottom: 4,
+              color: '#fff',
+              fontSize: 26,
+              fontWeight: 800,
+              padding: '14px 40px',
+              borderRadius: 12,
+              letterSpacing: 1,
             }}
-          />
-          <div style={{ color: '#1e293b', fontSize: 22, fontWeight: 600, letterSpacing: 1 }}>
+          >
             daitem.co.kr
           </div>
-          <div style={{ color: '#64748b', fontSize: 20, fontWeight: 400 }}>
+          <div
+            style={{
+              border: `2px solid ${brandColor}`,
+              color: brandColor,
+              fontSize: 22,
+              fontWeight: 600,
+              padding: '12px 32px',
+              borderRadius: 12,
+              letterSpacing: 0.5,
+            }}
+          >
             카카오채널 · pf.kakao.com/_kxkpsX
+          </div>
+          <div style={{ color: '#1e293b', fontSize: 22, fontWeight: 600, marginTop: 8 }}>
+            ↑ 프로필 링크를 참조하세요
           </div>
         </div>
       </div>

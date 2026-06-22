@@ -287,20 +287,6 @@ function Slide4({ slide, brandColor }: Omit<SlideTypeAProps, 'totalSlides'>) {
           {slide.title}
         </div>
       )}
-      <div
-        style={{
-          marginTop: 56,
-          backgroundColor: '#fff',
-          color: brandColor,
-          fontSize: 28,
-          fontWeight: 700,
-          padding: '20px 56px',
-          borderRadius: 50,
-        }}
-      >
-        지금 바로 확인하기 →
-      </div>
-
       {/* URL 정보 */}
       <div
         style={{
@@ -308,22 +294,37 @@ function Slide4({ slide, brandColor }: Omit<SlideTypeAProps, 'totalSlides'>) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: 14,
+          gap: 16,
         }}
       >
         <div
           style={{
-            width: 48,
-            height: 2,
-            backgroundColor: 'rgba(255,255,255,0.3)',
-            marginBottom: 4,
+            backgroundColor: '#fff',
+            color: brandColor,
+            fontSize: 26,
+            fontWeight: 800,
+            padding: '14px 40px',
+            borderRadius: 12,
+            letterSpacing: 1,
           }}
-        />
-        <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: 22, fontWeight: 600, letterSpacing: 1 }}>
+        >
           daitem.co.kr
         </div>
-        <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 20, fontWeight: 400 }}>
+        <div
+          style={{
+            backgroundColor: 'rgba(255,255,255,0.18)',
+            color: '#fff',
+            fontSize: 22,
+            fontWeight: 600,
+            padding: '12px 32px',
+            borderRadius: 12,
+            letterSpacing: 0.5,
+          }}
+        >
           카카오채널 · pf.kakao.com/_kxkpsX
+        </div>
+        <div style={{ color: '#fff', fontSize: 22, fontWeight: 600, marginTop: 8 }}>
+          ↑ 프로필 링크를 참조하세요
         </div>
       </div>
     </div>
