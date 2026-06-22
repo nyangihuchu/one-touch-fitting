@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import type { CardNewsProduct, CardNewsTemplateType, SlideData } from '@/lib/cardnews/types'
+import { getDefaultHook } from '@/lib/cardnews/hooks'
 import { createClient } from '@/lib/supabase/client'
 
 interface Step3CopyProps {
@@ -47,28 +48,38 @@ export function Step3Copy({ product, templateType, slideCopies, onChange }: Step
           .order('slide_index', { ascending: true })
 
         if (error || !data) {
-          /* 조회 실패 시 빈 슬라이드 5개 초기화 */
+          /* 조회 실패 시 기본 슬라이드 5개 초기화 (TYPE A는 훅 문구 적용) */
           onChange(
-            Array.from({ length: 5 }, (_, i) => ({
-              index: i,
-              title: `슬라이드 ${i + 1}`,
-              body: '',
-            }))
+            Array.from({ length: 5 }, (_, i) => {
+              if (templateType === 'A' && i === 0) {
+                const hook = getDefaultHook(product.model)
+                const body = `${hook.line1}\n${hook.line2}`
+                return { index: i, title: hook.line1, body }
+              }
+              return { index: i, title: `슬라이드 ${i + 1}`, body: '' }
+            })
           )
           return
         }
 
-        /* slide_index별로 첫 번째 규칙 선택 (category 우선) */
+        /* slide_index별 문구 매핑: null(기본) 먼저 → category 전용이 덮어씀 */
         const ruleMap = new Map<number, string>()
-        data.forEach((rule) => {
-          const idx = rule.slide_index
-          if (!ruleMap.has(idx) || rule.product_category !== null) {
-            ruleMap.set(idx, applyPlaceholders(rule.copy_pattern, product))
-          }
-        })
+        data
+          .filter((r) => r.product_category === null)
+          .forEach((rule) => ruleMap.set(rule.slide_index, applyPlaceholders(rule.copy_pattern, product)))
+        data
+          .filter((r) => r.product_category !== null)
+          .forEach((rule) => ruleMap.set(rule.slide_index, applyPlaceholders(rule.copy_pattern, product)))
 
         const copies: SlideData[] = Array.from({ length: 5 }, (_, i) => {
-          const body = ruleMap.get(i) ?? ''
+          let body = ruleMap.get(i) ?? ''
+
+          /* TYPE A Slide 0: 훅 문구가 비어있으면 제품 타입별 기본 훅 적용 */
+          if (templateType === 'A' && i === 0 && !body.trim()) {
+            const hook = getDefaultHook(product.model)
+            body = `${hook.line1}\n${hook.line2}`
+          }
+
           const firstLine = body.split('\n')[0] ?? `슬라이드 ${i + 1}`
           return { index: i, title: firstLine, body }
         })

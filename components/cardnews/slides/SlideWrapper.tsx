@@ -11,7 +11,7 @@ interface SlideWrapperProps {
 export function SlideWrapper({
   slideIndex,
   totalSlides,
-  brandColor = '#1D4ED8',
+  brandColor = '#FF6A00',
   companyName = 'SUPERFIX',
   children,
 }: SlideWrapperProps) {
@@ -19,7 +19,7 @@ export function SlideWrapper({
     <div
       style={{
         width: 1080,
-        height: 1080,
+        height: 1350,
         position: 'relative',
         overflow: 'hidden',
         backgroundColor: '#ffffff',
@@ -28,7 +28,7 @@ export function SlideWrapper({
       }}
     >
       {/* 메인 콘텐츠 */}
-      <div style={{ width: '100%', height: 1000, position: 'relative' }}>
+      <div style={{ width: '100%', height: 1270, position: 'relative' }}>
         {children}
       </div>
 

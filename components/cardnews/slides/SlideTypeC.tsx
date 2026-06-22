@@ -12,9 +12,8 @@ function parseLines(text: string) {
   return text.split('\n').filter(Boolean)
 }
 
-/* 슬라이드 0: 제품명 + 이미지 (크게) */
+/* 슬라이드 0: 모델명 우선 + 이미지 */
 function Slide0({ slide, product, brandColor }: Omit<SlideTypeCProps, 'totalSlides'>) {
-  const lines = parseLines(slide.body || '')
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: '#fff' }}>
       {/* 배경 도형 */}
@@ -24,20 +23,21 @@ function Slide0({ slide, product, brandColor }: Omit<SlideTypeCProps, 'totalSlid
           top: 0,
           right: 0,
           width: 520,
-          height: 520,
+          height: 580,
           backgroundColor: brandColor,
           borderRadius: '0 0 0 100%',
           opacity: 0.08,
         }}
       />
       <div style={{ position: 'relative', padding: '72px 64px', display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <div style={{ color: '#0f172a', fontSize: 52, fontWeight: 800, lineHeight: 1.2, marginBottom: 16 }}>
-          {lines[0] || product.product_name || slide.title}
+        {/* 모델명 강조 */}
+        <div style={{ color: '#0f172a', fontSize: 58, fontWeight: 900, lineHeight: 1.1, marginBottom: 8 }}>
+          {product.model || product.product_name || slide.title}
         </div>
-        {lines[1] && (
-          <div style={{ color: '#64748b', fontSize: 26, marginBottom: 16 }}>{lines[1]}</div>
-        )}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 0' }}>
+        <div style={{ color: '#64748b', fontSize: 26, marginBottom: 16 }}>
+          {product.shape || product.category || '원터치 피팅'}
+        </div>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 0' }}>
           {product.image_path ? (
             <img
               src={product.image_path}
@@ -63,7 +63,7 @@ function Slide0({ slide, product, brandColor }: Omit<SlideTypeCProps, 'totalSlid
           )}
         </div>
         <div style={{ color: '#94a3b8', fontSize: 20, marginTop: 16 }}>
-          {product.model || ''} · {product.category || '공압 피팅'}
+          {product.tube_spec || ''}{product.tube_spec && product.thread_spec ? ' · ' : ''}{product.thread_spec || ''}
         </div>
       </div>
     </div>
@@ -250,116 +250,59 @@ function Slide3({ slide, brandColor }: Omit<SlideTypeCProps, 'totalSlides'>) {
 /* 슬라이드 4: CTA */
 function Slide4({ slide, brandColor }: Omit<SlideTypeCProps, 'totalSlides'>) {
   const lines = parseLines(slide.body || '')
+  const ctaLine1 = lines[0] || '배관 규격이 고민된다면?'
+  const ctaLine2 = lines[1] || '프로필 링크 확인'
   return (
     <div
       style={{
         width: '100%',
         height: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: brandColor,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '60px 64px',
         textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden',
       }}
     >
-      {/* 배경 원 장식 */}
-      <div
-        style={{
-          position: 'absolute',
-          top: -120,
-          right: -120,
-          width: 400,
-          height: 400,
-          backgroundColor: brandColor,
-          borderRadius: '50%',
-          opacity: 0.08,
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: -80,
-          left: -80,
-          width: 300,
-          height: 300,
-          backgroundColor: brandColor,
-          borderRadius: '50%',
-          opacity: 0.06,
-        }}
-      />
-      <div style={{ position: 'relative', zIndex: 1 }}>
+      <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 22, fontWeight: 500, marginBottom: 32, letterSpacing: 2 }}>
+        SUPERFIX
+      </div>
+      <div style={{ color: '#fff', fontSize: 52, fontWeight: 800, lineHeight: 1.25, marginBottom: 16 }}>
+        {ctaLine1}
+      </div>
+      <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 32, fontWeight: 500, marginBottom: 56 }}>
+        {ctaLine2}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
         <div
           style={{
-            width: 100,
-            height: 100,
-            backgroundColor: brandColor,
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 48,
-            margin: '0 auto 40px',
+            backgroundColor: '#fff',
+            color: brandColor,
+            fontSize: 28,
+            fontWeight: 800,
+            padding: '16px 48px',
+            borderRadius: 14,
+            letterSpacing: 1,
           }}
         >
-          🛒
+          daitem.co.kr
         </div>
-        {(lines.length > 0 ? lines : [slide.title]).map((line, i) => (
-          <div
-            key={i}
-            style={{
-              color: i === 0 ? '#0f172a' : '#64748b',
-              fontSize: i === 0 ? 48 : 28,
-              fontWeight: i === 0 ? 800 : 400,
-              lineHeight: 1.35,
-              marginBottom: i === 0 ? 16 : 8,
-            }}
-          >
-            {line}
-          </div>
-        ))}
-        {/* URL 정보 */}
         <div
           style={{
-            marginTop: 48,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 16,
+            backgroundColor: 'rgba(255,255,255,0.18)',
+            color: '#fff',
+            fontSize: 22,
+            fontWeight: 600,
+            padding: '12px 32px',
+            borderRadius: 12,
           }}
         >
-          <div
-            style={{
-              backgroundColor: brandColor,
-              color: '#fff',
-              fontSize: 26,
-              fontWeight: 800,
-              padding: '14px 40px',
-              borderRadius: 12,
-              letterSpacing: 1,
-            }}
-          >
-            daitem.co.kr
-          </div>
-          <div
-            style={{
-              border: `2px solid ${brandColor}`,
-              color: brandColor,
-              fontSize: 22,
-              fontWeight: 600,
-              padding: '12px 32px',
-              borderRadius: 12,
-              letterSpacing: 0.5,
-            }}
-          >
-            카카오채널 · pf.kakao.com/_kxkpsX
-          </div>
-          <div style={{ color: '#1e293b', fontSize: 22, fontWeight: 600, marginTop: 8 }}>
-            ↑ 프로필 링크를 참조하세요
-          </div>
+          카카오채널 · pf.kakao.com/_kxkpsX
+        </div>
+        <div style={{ color: '#fff', fontSize: 22, fontWeight: 600, marginTop: 8 }}>
+          ↑ 프로필 링크를 참조하세요
         </div>
       </div>
     </div>
@@ -368,7 +311,7 @@ function Slide4({ slide, brandColor }: Omit<SlideTypeCProps, 'totalSlides'>) {
 
 const SLIDES = [Slide0, Slide1, Slide2, Slide3, Slide4]
 
-export function SlideTypeC({ slide, product, brandColor = '#1D4ED8', totalSlides = 5 }: SlideTypeCProps) {
+export function SlideTypeC({ slide, product, brandColor = '#FF6A00', totalSlides = 5 }: SlideTypeCProps) {
   const SlideContent = SLIDES[slide.index] ?? Slide0
   return (
     <SlideWrapper slideIndex={slide.index} totalSlides={totalSlides} brandColor={brandColor}>

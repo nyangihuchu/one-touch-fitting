@@ -9,8 +9,8 @@ export interface BrandSettings {
 }
 
 export const DEFAULT_BRAND: BrandSettings = {
-  primaryColor: '#1D4ED8',
-  secondaryColor: '#FFFFFF',
+  primaryColor: '#FF6A00',
+  secondaryColor: '#111111',
   companyName: 'SUPERFIX',
   tagline: '공압 전문 브랜드',
   logoUrl: '',

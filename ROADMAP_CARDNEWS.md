@@ -36,7 +36,8 @@ SUPERFIX 에어피팅 및 공압부품 상품 데이터를 기반으로 인스�
 | Phase 1: 상품 DB 및 이미지 현황 | 4 | 4 | 100% |
 | Phase 2: 카드뉴스 템플릿 및 PNG 생성 | 6 | 6 | 100% |
 | Phase 3: AI 문구 개선 (선택 기능) | 3 | 0 | 0% |
-| **전체** | **13** | **10** | **77%** |
+| Phase 4: 인스타그램 최적화 개선 | 4 | 4 | 100% |
+| **전체** | **17** | **14** | **82%** |
 
 ---
 
@@ -461,6 +462,65 @@ SUPERFIX 에어피팅 및 공압부품 상품 데이터를 기반으로 인스�
 - 브랜드 설정 저장 및 슬라이드 반영 정상 동작
 - 전체 카드뉴스 생성 플로우 1분 이내 완료
 - 빌드 및 린트 오류 없음
+
+---
+
+### Phase 4: 인스타그램 최적화 개선
+
+> 완료일: 2026-06-22
+> 목표: 실제 인스타그램 운영 수준의 카드뉴스 품질 달성 — 세로형(1080×1350), SUPERFIX 오렌지 브랜드 컬러, 문제 해결형 훅 구조, 제품 타입별 자동 훅 시스템 적용
+
+---
+
+#### ✅ Task 401: 1080×1350 세로형 변경 + SUPERFIX 브랜드 컬러 적용
+
+- 관련 파일: `lib/cardnews/playwright.ts`, `lib/cardnews/brand.ts`, `lib/cardnews/slide-renderer.ts`, `app/api/cardnews/render/route.ts`, `components/cardnews/slides/SlideWrapper.tsx`, `components/cardnews/steps/Step4Preview.tsx`
+
+**변경 사항**
+- 캔버스 크기: 1080×1080 → **1080×1350** (인스타 세로형 4:5 비율)
+- 기본 브랜드 컬러: #1D4ED8(파랑) → **#FF6A00(오렌지)** / Secondary: #111111
+- 미리보기 스케일 컨테이너 width/height 분리 (1350 높이 대응)
+
+---
+
+#### ✅ Task 402: TYPE A 문제 해결형 템플릿 완전 재설계
+
+- 관련 파일: `components/cardnews/slides/SlideTypeA.tsx`, `lib/cardnews/slide-renderer.ts`, `components/cardnews/steps/Step2Template.tsx`
+
+**새 슬라이드 구조**
+- Slide 0: **훅(Hook)** — 공감형 질문 + 제품 이미지 (상단 40% 텍스트 / 하단 60% 이미지)
+- Slide 1: **문제 공감** — #111111 배경, 문제점 3가지
+- Slide 2: **해결 방법** — 규격 카드 (모델명/튜브/나사)
+- Slide 3: **제품 소개** — 이미지 60% + 스펙 텍스트 40%
+- Slide 4: **CTA** — 클릭 유도형 (`"배관 규격이 고민된다면?\n프로필 링크 확인"`)
+
+---
+
+#### ✅ Task 403: 제품 타입별 훅 자동 생성 시스템
+
+- 관련 파일: `lib/cardnews/hooks.ts` (신규), `components/cardnews/steps/Step3Copy.tsx`
+
+**훅 매핑 (모델 코드 → 기본 훅)**
+- PC → `"4mm 호스 연결, 뭘 써야 할까?"`
+- PL → `"좁은 공간에서 배관 연결이 어렵다면?"`
+- PB → `"배관 방향을 바꿔야 한다면?"`
+- PY → `"호스를 분기해야 한다면?"`
+- PWT → `"두 방향을 동시에 연결해야 한다면?"`
+- PST → `"부식 걱정 없이 T자 배관이 필요하다면?"`
+- Step3Copy: copy_rules 없을 때 TYPE A Slide 0에 타입별 훅 자동 적용
+
+---
+
+#### ✅ Task 404: 제품명 축약 + CTA 개선 + 슬라이드 B/C 업데이트
+
+- 관련 파일: `components/cardnews/slides/SlideTypeB.tsx`, `components/cardnews/slides/SlideTypeC.tsx`, `lib/cardnews/slide-renderer.ts`
+
+**변경 사항**
+- 제품명 표시: `product_name`(긴 이름) → **`model`(모델코드) + `shape`(형태명)** 2줄 구조
+- TYPE B Slide0: 모델명 대형 표시 + 형태명 보조 텍스트 (slide-renderer.ts와 일치)
+- TYPE C Slide0: 모델명 우선 표시 (58px 굵은 폰트)
+- 모든 TYPE의 CTA(Slide 4): `"배관 규격이 고민된다면?\n프로필 링크 확인"` 통일
+- copy_rules 우선순위 버그 수정: null 기본 문구 → category 전용 문구가 덮어쓰도록 보장
 
 ---
 

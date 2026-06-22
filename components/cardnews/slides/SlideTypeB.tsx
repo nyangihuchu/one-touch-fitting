@@ -24,12 +24,12 @@ function Slide0({ slide, product, brandColor }: Omit<SlideTypeBProps, 'totalSlid
           flexShrink: 0,
         }}
       >
-        <div style={{ color: '#fff', fontSize: 50, fontWeight: 800, lineHeight: 1.25 }}>
-          {lines[0] || slide.title}
+        <div style={{ color: '#fff', fontSize: 58, fontWeight: 900, lineHeight: 1.1 }}>
+          {product.model || lines[0] || slide.title}
         </div>
-        {lines[1] && (
-          <div style={{ color: '#94a3b8', fontSize: 26, marginTop: 16 }}>{lines[1]}</div>
-        )}
+        <div style={{ color: '#94a3b8', fontSize: 26, marginTop: 12 }}>
+          {product.shape || product.category || '원터치 피팅'}
+        </div>
       </div>
       <div
         style={{
@@ -298,12 +298,14 @@ function Slide3({ slide, product, brandColor }: Omit<SlideTypeBProps, 'totalSlid
 /* 슬라이드 4: CTA */
 function Slide4({ slide, brandColor }: Omit<SlideTypeBProps, 'totalSlides'>) {
   const lines = parseLines(slide.body || '')
+  const ctaLine1 = lines[0] || '배관 규격이 고민된다면?'
+  const ctaLine2 = lines[1] || '프로필 링크 확인'
   return (
     <div
       style={{
         width: '100%',
         height: '100%',
-        background: `linear-gradient(135deg, ${brandColor} 0%, #1e40af 100%)`,
+        backgroundColor: brandColor,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -312,53 +314,24 @@ function Slide4({ slide, brandColor }: Omit<SlideTypeBProps, 'totalSlides'>) {
         textAlign: 'center',
       }}
     >
-      <div
-        style={{
-          width: 80,
-          height: 80,
-          backgroundColor: 'rgba(255,255,255,0.15)',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 40,
-          marginBottom: 40,
-        }}
-      >
-        🔧
+      <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 22, fontWeight: 500, marginBottom: 32, letterSpacing: 2 }}>
+        SUPERFIX
       </div>
-      {(lines.length > 0 ? lines : [slide.title]).map((line, i) => (
-        <div
-          key={i}
-          style={{
-            color: '#fff',
-            fontSize: i === 0 ? 48 : 30,
-            fontWeight: i === 0 ? 800 : 400,
-            lineHeight: 1.35,
-            marginBottom: i === 0 ? 20 : 10,
-          }}
-        >
-          {line}
-        </div>
-      ))}
-      {/* URL 정보 */}
-      <div
-        style={{
-          marginTop: 48,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 16,
-        }}
-      >
+      <div style={{ color: '#fff', fontSize: 52, fontWeight: 800, lineHeight: 1.25, marginBottom: 16 }}>
+        {ctaLine1}
+      </div>
+      <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 32, fontWeight: 500, marginBottom: 56 }}>
+        {ctaLine2}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
         <div
           style={{
             backgroundColor: '#fff',
             color: brandColor,
-            fontSize: 26,
+            fontSize: 28,
             fontWeight: 800,
-            padding: '14px 40px',
-            borderRadius: 12,
+            padding: '16px 48px',
+            borderRadius: 14,
             letterSpacing: 1,
           }}
         >
@@ -372,7 +345,6 @@ function Slide4({ slide, brandColor }: Omit<SlideTypeBProps, 'totalSlides'>) {
             fontWeight: 600,
             padding: '12px 32px',
             borderRadius: 12,
-            letterSpacing: 0.5,
           }}
         >
           카카오채널 · pf.kakao.com/_kxkpsX
@@ -387,7 +359,7 @@ function Slide4({ slide, brandColor }: Omit<SlideTypeBProps, 'totalSlides'>) {
 
 const SLIDES = [Slide0, Slide1, Slide2, Slide3, Slide4]
 
-export function SlideTypeB({ slide, product, brandColor = '#1D4ED8', totalSlides = 5 }: SlideTypeBProps) {
+export function SlideTypeB({ slide, product, brandColor = '#FF6A00', totalSlides = 5 }: SlideTypeBProps) {
   const SlideContent = SLIDES[slide.index] ?? Slide0
   return (
     <SlideWrapper slideIndex={slide.index} totalSlides={totalSlides} brandColor={brandColor}>

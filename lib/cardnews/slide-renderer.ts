@@ -18,76 +18,97 @@ function brandBar(slideIndex: number, totalSlides: number, brandColor: string, c
   </div>`
 }
 
-/* ─── TYPE A: 문제 해결형 ─────────────────────────────────── */
+/* 공통 CTA 하단 버튼 그룹 */
+function ctaButtons(brandColor: string): string {
+  return `<div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+    <div style="background:#fff;color:${brandColor};font-size:28px;font-weight:800;padding:16px 48px;border-radius:14px;letter-spacing:1px;">daitem.co.kr</div>
+    <div style="background:rgba(255,255,255,0.18);color:#fff;font-size:22px;font-weight:600;padding:12px 32px;border-radius:12px;">카카오채널 · pf.kakao.com/_kxkpsX</div>
+    <div style="color:#fff;font-size:22px;font-weight:600;margin-top:8px;">↑ 프로필 링크를 참조하세요</div>
+  </div>`
+}
+
+/* ─── TYPE A: 문제 해결형 (훅 기반 5슬라이드) ─────────────── */
 function slideAContent(slide: SlideData, product: CardNewsProduct, brandColor: string): string {
   const lines = parseLines(slide.body)
   const i = slide.index
 
+  /* Slide 0: 훅(Hook) — 상단 40% 텍스트, 하단 60% 이미지 */
   if (i === 0) {
+    const hookLine1 = esc(lines[0] || '이런 고민 있으신가요?')
+    const hookLine2 = lines[1] ? `<div style="color:rgba(255,255,255,0.9);font-size:44px;font-weight:700;line-height:1.25;margin-top:8px;">${esc(lines[1])}</div>` : ''
     return `<div style="display:flex;flex-direction:column;width:100%;height:100%;">
-      <div style="background:${brandColor};padding:60px 64px 40px;flex-shrink:0;">
-        <div style="color:#fff;font-size:52px;font-weight:800;line-height:1.2;">${esc(lines[0] || slide.title)}</div>
-        ${lines[1] ? `<div style="color:rgba(255,255,255,0.85);font-size:30px;margin-top:16px;line-height:1.4;">${esc(lines[1])}</div>` : ''}
+      <div style="background:${brandColor};padding:64px 64px 48px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;">
+        <div style="color:rgba(255,255,255,0.75);font-size:24px;font-weight:600;margin-bottom:16px;letter-spacing:1px;">SUPERFIX 공압 피팅</div>
+        <div style="color:#fff;font-size:56px;font-weight:800;line-height:1.2;">${hookLine1}</div>
+        ${hookLine2}
       </div>
-      <div style="flex:1;display:flex;align-items:center;justify-content:center;background:#f8fafc;padding:32px;">
-        ${product.image_path ? `<img src="${esc(product.image_path)}" alt="" style="max-width:70%;max-height:100%;object-fit:contain;" />` : `<div style="width:280px;height:280px;background:#e2e8f0;border-radius:16px;"></div>`}
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;background:#f8fafc;padding:40px;">
+        ${product.image_path ? `<img src="${esc(product.image_path)}" alt="" style="max-width:68%;max-height:100%;object-fit:contain;" />` : `<div style="width:320px;height:320px;background:#e2e8f0;border-radius:20px;"></div>`}
       </div>
     </div>`
   }
 
+  /* Slide 1: 문제 공감 */
   if (i === 1) {
-    const problems = lines.slice(1).length > 0 ? lines.slice(1) : ['복잡한 배관 작업', '누설 걱정', '규격 혼란']
-    return `<div style="width:100%;height:100%;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 64px;">
-      <div style="color:#94a3b8;font-size:22px;font-weight:500;margin-bottom:24px;letter-spacing:2px;">공압 배관의 고민</div>
-      <div style="color:#fff;font-size:48px;font-weight:800;text-align:center;line-height:1.3;margin-bottom:64px;">${esc(lines[0] || slide.title)}</div>
-      <div style="display:flex;flex-direction:column;gap:24px;width:100%;">
-        ${problems.map((p, idx) => `<div style="display:flex;align-items:center;gap:24px;background:rgba(255,255,255,0.07);border-radius:16px;padding:28px 36px;">
-          <div style="width:56px;height:56px;border-radius:50%;background:#ef4444;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;font-weight:700;flex-shrink:0;">${idx + 1}</div>
+    const title = esc(lines[0] || '기존 방법의 한계')
+    const desc = esc(lines[1] || '작업 공간 확보가 어렵습니다')
+    const problems = lines.slice(2).length > 0 ? lines.slice(2) : ['공간이 좁아 직선 연결이 어려움', '배관 방향 변경 시 재작업 필요', '규격 실수로 인한 누설 위험']
+    return `<div style="width:100%;height:100%;background:#111111;display:flex;flex-direction:column;padding:64px 64px;">
+      <div style="color:rgba(255,255,255,0.5);font-size:22px;font-weight:500;margin-bottom:20px;letter-spacing:2px;">이런 문제 있으신가요?</div>
+      <div style="color:#fff;font-size:50px;font-weight:800;line-height:1.2;margin-bottom:12px;">${title}</div>
+      <div style="color:rgba(255,255,255,0.6);font-size:28px;margin-bottom:56px;">${desc}</div>
+      <div style="display:flex;flex-direction:column;gap:24px;flex:1;justify-content:center;">
+        ${problems.map((p, idx) => `<div style="display:flex;align-items:center;gap:24px;background:rgba(255,255,255,0.06);border-radius:16px;padding:28px 36px;border-left:4px solid rgba(255,255,255,0.2);">
+          <div style="width:52px;height:52px;border-radius:50%;background:#ef4444;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:700;flex-shrink:0;">${idx + 1}</div>
           <span style="color:#e2e8f0;font-size:28px;font-weight:500;">${esc(p)}</span>
         </div>`).join('')}
       </div>
     </div>`
   }
 
+  /* Slide 2: 해결 방법 */
   if (i === 2) {
-    return `<div style="width:100%;height:100%;background:#f0f9ff;display:flex;flex-direction:column;padding:72px 64px;">
-      <div style="color:${brandColor};font-size:24px;font-weight:700;margin-bottom:16px;letter-spacing:1px;">✓ 해결책</div>
-      <div style="color:#0f172a;font-size:50px;font-weight:800;line-height:1.25;margin-bottom:48px;">${esc(lines[0] || slide.title)}</div>
-      <div style="display:flex;gap:24px;margin-bottom:48px;">
-        ${[['모델명', product.model], ['튜브규격', product.tube_spec], ['나사규격', product.thread_spec]].map(([label, val]) => `<div style="flex:1;background:#fff;border-radius:16px;padding:32px 24px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+    const title = esc(lines[0] || `${product.model || '원터치 피팅'}으로 해결`)
+    const desc = lines[1] ? `<div style="color:#475569;font-size:26px;margin-bottom:40px;line-height:1.5;">${esc(lines[1])}</div>` : ''
+    return `<div style="width:100%;height:100%;background:#fff;display:flex;flex-direction:column;padding:64px 64px;">
+      <div style="color:${brandColor};font-size:22px;font-weight:700;margin-bottom:16px;letter-spacing:1px;">✓ 해결책</div>
+      <div style="color:#0f172a;font-size:50px;font-weight:800;line-height:1.2;margin-bottom:16px;">${title}</div>
+      ${desc}
+      <div style="display:flex;gap:24px;margin-top:auto;padding-top:40px;">
+        ${[['모델명', product.model], ['튜브규격', product.tube_spec], ['나사규격', product.thread_spec]].map(([label, val]) => `<div style="flex:1;background:#f8fafc;border-radius:20px;padding:36px 24px;text-align:center;border-top:4px solid ${brandColor};">
           <div style="color:#64748b;font-size:20px;font-weight:500;margin-bottom:12px;">${esc(label)}</div>
-          <div style="color:${brandColor};font-size:32px;font-weight:800;">${esc(val)}</div>
+          <div style="color:${brandColor};font-size:34px;font-weight:800;">${esc(val)}</div>
         </div>`).join('')}
       </div>
-      ${lines.slice(1).map((l) => `<div style="color:#475569;font-size:26px;line-height:1.6;">${esc(l)}</div>`).join('')}
     </div>`
   }
 
+  /* Slide 3: 제품 소개 — 이미지 60% + 텍스트 40% */
   if (i === 3) {
-    const features = lines.slice(1).length > 0 ? lines.slice(1) : ['원터치 간편 연결', '완벽한 기밀 성능']
-    return `<div style="width:100%;height:100%;display:flex;">
-      <div style="width:420px;background:#f8fafc;display:flex;align-items:center;justify-content:center;padding:32px;flex-shrink:0;">
-        ${product.image_path ? `<img src="${esc(product.image_path)}" alt="" style="max-width:100%;max-height:100%;object-fit:contain;" />` : `<div style="width:200px;height:200px;background:#e2e8f0;border-radius:12px;"></div>`}
+    const features = lines.slice(1).length > 0 ? lines.slice(1) : ['원터치 간편 연결', '완벽한 기밀 성능', '다양한 규격 지원']
+    return `<div style="width:100%;height:100%;display:flex;background:#F5F5F5;">
+      <div style="width:60%;display:flex;align-items:center;justify-content:center;padding:40px;background:#fff;">
+        ${product.image_path ? `<img src="${esc(product.image_path)}" alt="" style="max-width:100%;max-height:100%;object-fit:contain;" />` : `<div style="width:280px;height:280px;background:#e2e8f0;border-radius:16px;"></div>`}
       </div>
-      <div style="flex:1;padding:64px 56px;display:flex;flex-direction:column;justify-content:center;">
-        <div style="color:#64748b;font-size:20px;margin-bottom:12px;">제품 상세</div>
-        <div style="color:#0f172a;font-size:40px;font-weight:800;line-height:1.25;margin-bottom:40px;">${esc(lines[0] || slide.title)}</div>
-        <div style="display:flex;flex-direction:column;gap:20px;">
-          ${features.map((f) => `<div style="display:flex;align-items:center;gap:16px;"><div style="width:10px;height:10px;border-radius:50%;background:${brandColor};flex-shrink:0;"></div><span style="color:#334155;font-size:26px;line-height:1.5;">${esc(f)}</span></div>`).join('')}
+      <div style="flex:1;padding:56px 48px 56px 40px;display:flex;flex-direction:column;justify-content:center;">
+        <div style="color:#64748b;font-size:20px;margin-bottom:8px;">${esc(product.shape || '원터치 피팅')}</div>
+        <div style="color:#0f172a;font-size:44px;font-weight:900;line-height:1.1;margin-bottom:8px;">${esc(product.model || lines[0] || slide.title)}</div>
+        <div style="color:${brandColor};font-size:22px;font-weight:700;margin-bottom:40px;">${esc(product.category || '공압 피팅')}</div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          ${features.map((f) => `<div style="display:flex;align-items:center;gap:14px;"><div style="width:8px;height:8px;border-radius:50%;background:${brandColor};flex-shrink:0;"></div><span style="color:#334155;font-size:24px;line-height:1.5;">${esc(f)}</span></div>`).join('')}
         </div>
       </div>
     </div>`
   }
 
-  /* slide 4: CTA */
+  /* Slide 4: CTA */
+  const ctaLine1 = esc(lines[0] || '배관 규격이 고민된다면?')
+  const ctaLine2 = esc(lines[1] || '프로필 링크 확인')
   return `<div style="width:100%;height:100%;background:${brandColor};display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 64px;text-align:center;">
-    <div style="color:rgba(255,255,255,0.7);font-size:24px;font-weight:500;margin-bottom:32px;letter-spacing:2px;">SUPERFIX 공압 부품 전문몰</div>
-    ${(lines.length > 0 ? lines : [slide.title]).map((l, idx) => `<div style="color:#fff;font-size:${idx === 0 ? 52 : 36}px;font-weight:${idx === 0 ? 800 : 500};line-height:1.3;margin-bottom:${idx === 0 ? 24 : 12}px;">${esc(l)}</div>`).join('')}
-    <div style="margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:16px;">
-      <div style="background:#fff;color:${brandColor};font-size:26px;font-weight:800;padding:14px 40px;border-radius:12px;letter-spacing:1px;">daitem.co.kr</div>
-      <div style="background:rgba(255,255,255,0.18);color:#fff;font-size:22px;font-weight:600;padding:12px 32px;border-radius:12px;">카카오채널 · pf.kakao.com/_kxkpsX</div>
-      <div style="color:#fff;font-size:22px;font-weight:600;margin-top:8px;">↑ 프로필 링크를 참조하세요</div>
-    </div>
+    <div style="color:rgba(255,255,255,0.7);font-size:22px;font-weight:500;margin-bottom:32px;letter-spacing:2px;">SUPERFIX</div>
+    <div style="color:#fff;font-size:52px;font-weight:800;line-height:1.25;margin-bottom:16px;">${ctaLine1}</div>
+    <div style="color:rgba(255,255,255,0.85);font-size:32px;font-weight:500;margin-bottom:56px;">${ctaLine2}</div>
+    ${ctaButtons(brandColor)}
   </div>`
 }
 
@@ -99,8 +120,8 @@ function slideBContent(slide: SlideData, product: CardNewsProduct, brandColor: s
   if (i === 0) {
     return `<div style="display:flex;flex-direction:column;width:100%;height:100%;">
       <div style="background:#0f172a;padding:56px 64px 40px;flex-shrink:0;">
-        <div style="color:#fff;font-size:50px;font-weight:800;line-height:1.25;">${esc(lines[0] || slide.title)}</div>
-        ${lines[1] ? `<div style="color:#94a3b8;font-size:26px;margin-top:16px;">${esc(lines[1])}</div>` : ''}
+        <div style="color:#fff;font-size:58px;font-weight:900;line-height:1.1;">${esc(product.model || lines[0] || slide.title)}</div>
+        <div style="color:#94a3b8;font-size:26px;margin-top:12px;">${esc(product.shape || product.category || '원터치 피팅')}</div>
       </div>
       <div style="flex:1;display:flex;align-items:center;justify-content:center;background:#f1f5f9;padding:32px;">
         ${product.image_path ? `<img src="${esc(product.image_path)}" alt="" style="max-width:65%;max-height:100%;object-fit:contain;" />` : `<div style="width:260px;height:260px;background:#e2e8f0;border-radius:16px;"></div>`}
@@ -158,14 +179,13 @@ function slideBContent(slide: SlideData, product: CardNewsProduct, brandColor: s
     </div>`
   }
 
-  return `<div style="width:100%;height:100%;background:linear-gradient(135deg,${brandColor} 0%,#1e40af 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 64px;text-align:center;">
-    <div style="width:80px;height:80px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:40px;">🔧</div>
-    ${(lines.length > 0 ? lines : [slide.title]).map((l, idx) => `<div style="color:#fff;font-size:${idx === 0 ? 48 : 30}px;font-weight:${idx === 0 ? 800 : 400};line-height:1.35;margin-bottom:${idx === 0 ? 20 : 10}px;">${esc(l)}</div>`).join('')}
-    <div style="margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:16px;">
-      <div style="background:#fff;color:${brandColor};font-size:26px;font-weight:800;padding:14px 40px;border-radius:12px;letter-spacing:1px;">daitem.co.kr</div>
-      <div style="background:rgba(255,255,255,0.18);color:#fff;font-size:22px;font-weight:600;padding:12px 32px;border-radius:12px;">카카오채널 · pf.kakao.com/_kxkpsX</div>
-      <div style="color:#fff;font-size:22px;font-weight:600;margin-top:8px;">↑ 프로필 링크를 참조하세요</div>
-    </div>
+  const ctaLine1 = esc(lines[0] || '배관 규격이 고민된다면?')
+  const ctaLine2 = esc(lines[1] || '프로필 링크 확인')
+  return `<div style="width:100%;height:100%;background:${brandColor};display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 64px;text-align:center;">
+    <div style="color:rgba(255,255,255,0.7);font-size:22px;font-weight:500;margin-bottom:32px;letter-spacing:2px;">SUPERFIX</div>
+    <div style="color:#fff;font-size:52px;font-weight:800;line-height:1.25;margin-bottom:16px;">${ctaLine1}</div>
+    <div style="color:rgba(255,255,255,0.85);font-size:32px;font-weight:500;margin-bottom:56px;">${ctaLine2}</div>
+    ${ctaButtons(brandColor)}
   </div>`
 }
 
@@ -174,16 +194,18 @@ function slideCContent(slide: SlideData, product: CardNewsProduct, brandColor: s
   const lines = parseLines(slide.body)
   const i = slide.index
 
+  /* Slide 0: 모델명 우선 + 이미지 */
   if (i === 0) {
+    const tubeLine = [product.tube_spec, product.thread_spec].filter(Boolean).join(' · ')
     return `<div style="width:100%;height:100%;position:relative;background:#fff;">
-      <div style="position:absolute;top:0;right:0;width:520px;height:520px;background:${brandColor};border-radius:0 0 0 100%;opacity:0.08;"></div>
+      <div style="position:absolute;top:0;right:0;width:520px;height:580px;background:${brandColor};border-radius:0 0 0 100%;opacity:0.08;"></div>
       <div style="position:relative;padding:72px 64px;display:flex;flex-direction:column;height:100%;">
-        <div style="color:#0f172a;font-size:52px;font-weight:800;line-height:1.2;margin-bottom:16px;">${esc(lines[0] || product.product_name || slide.title)}</div>
-        ${lines[1] ? `<div style="color:#64748b;font-size:26px;margin-bottom:16px;">${esc(lines[1])}</div>` : ''}
-        <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:20px 0;">
+        <div style="color:#0f172a;font-size:58px;font-weight:900;line-height:1.1;margin-bottom:8px;">${esc(product.model || product.product_name || slide.title)}</div>
+        <div style="color:#64748b;font-size:26px;margin-bottom:16px;">${esc(product.shape || product.category || '원터치 피팅')}</div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px 0;">
           ${product.image_path ? `<img src="${esc(product.image_path)}" alt="" style="max-width:72%;max-height:100%;object-fit:contain;" />` : `<div style="width:300px;height:300px;background:#f1f5f9;border-radius:24px;"></div>`}
         </div>
-        <div style="color:#94a3b8;font-size:20px;margin-top:16px;">${esc(product.model ?? '')} · ${esc(product.category ?? '공압 피팅')}</div>
+        <div style="color:#94a3b8;font-size:20px;margin-top:16px;">${esc(tubeLine || product.category || '공압 피팅')}</div>
       </div>
     </div>`
   }
@@ -231,18 +253,13 @@ function slideCContent(slide: SlideData, product: CardNewsProduct, brandColor: s
     </div>`
   }
 
-  return `<div style="width:100%;height:100%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 64px;text-align:center;position:relative;overflow:hidden;">
-    <div style="position:absolute;top:-120px;right:-120px;width:400px;height:400px;background:${brandColor};border-radius:50%;opacity:0.08;"></div>
-    <div style="position:absolute;bottom:-80px;left:-80px;width:300px;height:300px;background:${brandColor};border-radius:50%;opacity:0.06;"></div>
-    <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;">
-      <div style="width:100px;height:100px;background:${brandColor};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:48px;margin-bottom:40px;">🛒</div>
-      ${(lines.length > 0 ? lines : [slide.title]).map((l, idx) => `<div style="color:${idx === 0 ? '#0f172a' : '#64748b'};font-size:${idx === 0 ? 48 : 28}px;font-weight:${idx === 0 ? 800 : 400};line-height:1.35;margin-bottom:${idx === 0 ? 16 : 8}px;">${esc(l)}</div>`).join('')}
-      <div style="margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:16px;">
-        <div style="background:${brandColor};color:#fff;font-size:26px;font-weight:800;padding:14px 40px;border-radius:12px;letter-spacing:1px;">daitem.co.kr</div>
-        <div style="border:2px solid ${brandColor};color:${brandColor};font-size:22px;font-weight:600;padding:12px 32px;border-radius:12px;">카카오채널 · pf.kakao.com/_kxkpsX</div>
-        <div style="color:#1e293b;font-size:22px;font-weight:600;margin-top:8px;">↑ 프로필 링크를 참조하세요</div>
-      </div>
-    </div>
+  const ctaLine1 = esc(lines[0] || '배관 규격이 고민된다면?')
+  const ctaLine2 = esc(lines[1] || '프로필 링크 확인')
+  return `<div style="width:100%;height:100%;background:${brandColor};display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 64px;text-align:center;">
+    <div style="color:rgba(255,255,255,0.7);font-size:22px;font-weight:500;margin-bottom:32px;letter-spacing:2px;">SUPERFIX</div>
+    <div style="color:#fff;font-size:52px;font-weight:800;line-height:1.25;margin-bottom:16px;">${ctaLine1}</div>
+    <div style="color:rgba(255,255,255,0.85);font-size:32px;font-weight:500;margin-bottom:56px;">${ctaLine2}</div>
+    ${ctaButtons(brandColor)}
   </div>`
 }
 
@@ -255,7 +272,7 @@ export function renderSlideToHtml(
   product: CardNewsProduct,
   templateType: CardNewsTemplateType,
   totalSlides = 5,
-  brandColor = '#1D4ED8',
+  brandColor = '#FF6A00',
   companyName = 'SUPERFIX'
 ): string {
   const slideContent =
@@ -273,12 +290,12 @@ export function renderSlideToHtml(
   <meta charset="utf-8">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 1080px; height: 1080px; overflow: hidden; background: #fff; font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; }
+    html, body { width: 1080px; height: 1350px; overflow: hidden; background: #fff; font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; }
   </style>
 </head>
 <body>
-  <div style="width:1080px;height:1080px;position:relative;overflow:hidden;background:#fff;font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;">
-    <div style="width:100%;height:1000px;position:relative;">${slideContent}</div>
+  <div style="width:1080px;height:1350px;position:relative;overflow:hidden;background:#fff;font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;">
+    <div style="width:100%;height:1270px;position:relative;">${slideContent}</div>
     ${body}
   </div>
 </body>

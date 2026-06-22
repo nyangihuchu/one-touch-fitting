@@ -12,8 +12,8 @@ interface Step4PreviewProps {
   slideCopies: SlideData[]
 }
 
-const SCALE = 0.32       // 1080 * 0.32 ≈ 346px 미리보기
-const THUMB_SCALE = 0.09 // 1080 * 0.09 ≈ 97px 썸네일
+const SCALE = 0.32       // 1080 * 0.32 ≈ 346px 미리보기 너비
+const THUMB_SCALE = 0.09 // 1080 * 0.09 ≈ 97px 썸네일 너비
 
 function SlideRenderer({
   slide,
@@ -46,8 +46,10 @@ export function Step4Preview({ product, templateType, slideCopies }: Step4Previe
     )
   }
 
-  const previewSize = Math.round(1080 * SCALE)
-  const thumbSize = Math.round(1080 * THUMB_SCALE)
+  const previewW = Math.round(1080 * SCALE)
+  const previewH = Math.round(1350 * SCALE)
+  const thumbW = Math.round(1080 * THUMB_SCALE)
+  const thumbH = Math.round(1350 * THUMB_SCALE)
 
   return (
     <div className='space-y-6'>
@@ -73,8 +75,8 @@ export function Step4Preview({ product, templateType, slideCopies }: Step4Previe
           {/* 축소된 슬라이드 컨테이너 */}
           <div
             style={{
-              width: previewSize,
-              height: previewSize,
+              width: previewW,
+              height: previewH,
               overflow: 'hidden',
               borderRadius: 12,
               boxShadow: '0 8px 40px rgba(0,0,0,0.18)',
@@ -86,7 +88,7 @@ export function Step4Preview({ product, templateType, slideCopies }: Step4Previe
                 transform: `scale(${SCALE})`,
                 transformOrigin: 'top left',
                 width: 1080,
-                height: 1080,
+                height: 1350,
               }}
             >
               <SlideRenderer
@@ -122,8 +124,8 @@ export function Step4Preview({ product, templateType, slideCopies }: Step4Previe
             type='button'
             onClick={() => setCurrentIndex(i)}
             style={{
-              width: thumbSize,
-              height: thumbSize,
+              width: thumbW,
+              height: thumbH,
               overflow: 'hidden',
               borderRadius: 6,
               border: i === currentIndex ? '2px solid hsl(var(--primary))' : '2px solid transparent',
@@ -139,7 +141,7 @@ export function Step4Preview({ product, templateType, slideCopies }: Step4Previe
                 transform: `scale(${THUMB_SCALE})`,
                 transformOrigin: 'top left',
                 width: 1080,
-                height: 1080,
+                height: 1350,
               }}
             >
               <SlideRenderer
@@ -155,7 +157,7 @@ export function Step4Preview({ product, templateType, slideCopies }: Step4Previe
 
       <div className='rounded-lg border bg-muted/40 p-4'>
         <p className='text-xs text-muted-foreground'>
-          💡 미리보기는 실제 PNG 비율(1080×1080px)을 축소한 것입니다. 제품 이미지 로드 여부에 따라 실제 PNG 결과가 다를 수 있습니다.
+          💡 미리보기는 실제 PNG 비율(1080×1350px)을 축소한 것입니다. 제품 이미지 로드 여부에 따라 실제 PNG 결과가 다를 수 있습니다.
         </p>
       </div>
     </div>
