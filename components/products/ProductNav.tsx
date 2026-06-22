@@ -14,6 +14,7 @@ const navItems = [
   { href: '/products/my', label: 'My 제품' },
   { href: '/products/guide', label: '피팅 가이드' },
   { href: '/superfix', label: '상세페이지 생성' },
+  { href: '/cardnews/dashboard', label: '카드뉴스' },
 ]
 
 export function ProductNav() {
@@ -45,7 +46,7 @@ export function ProductNav() {
             href={href}
             className={cn(
               'rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
-              pathname === href
+              (pathname === href || (href !== '/' && pathname.startsWith(href)))
                 ? 'bg-accent text-accent-foreground'
                 : 'text-muted-foreground'
             )}
@@ -99,7 +100,7 @@ export function ProductNav() {
                 onClick={() => setIsMenuOpen(false)}
                 className={cn(
                   'px-4 py-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
-                  pathname === href
+                  (pathname === href || (href !== '/' && pathname.startsWith(href)))
                     ? 'bg-accent text-accent-foreground'
                     : 'text-muted-foreground'
                 )}

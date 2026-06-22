@@ -101,7 +101,7 @@ export function SuperfixWizard() {
   const [productJsonList, setProductJsonList] = useState<ProductJSON[]>([])
   const [showSelectionWarning, setShowSelectionWarning] = useState(false)
 
-  const [aiContentList, setAiContentList] = useState<AIGeneratedContent[]>([])
+  const [, setAiContentList] = useState<AIGeneratedContent[]>([])
   const [htmlList, setHtmlList] = useState<string[]>([])
   const [isGenerating, setIsGenerating] = useState(false)
   const [generationError, setGenerationError] = useState<string | null>(null)

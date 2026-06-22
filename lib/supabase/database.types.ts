@@ -14,6 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
+      card_news_jobs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          output_urls: Json
+          product_id: number | null
+          slide_copies: Json
+          status: string
+          template_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          output_urls?: Json
+          product_id?: number | null
+          slide_copies?: Json
+          status?: string
+          template_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          output_urls?: Json
+          product_id?: number | null
+          slide_copies?: Json
+          status?: string
+          template_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "card_news_jobs_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "my_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      card_news_templates: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          slide_count: number
+          slide_structure: Json | null
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: never
+          name: string
+          slide_count?: number
+          slide_structure?: Json | null
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: never
+          name?: string
+          slide_count?: number
+          slide_structure?: Json | null
+          type?: string
+        }
+        Relationships: []
+      }
+      copy_rules: {
+        Row: {
+          copy_pattern: string
+          created_at: string
+          id: number
+          placeholder_keys: Json
+          product_category: string | null
+          slide_index: number
+          template_type: string
+        }
+        Insert: {
+          copy_pattern: string
+          created_at?: string
+          id?: never
+          placeholder_keys?: Json
+          product_category?: string | null
+          slide_index: number
+          template_type: string
+        }
+        Update: {
+          copy_pattern?: string
+          created_at?: string
+          id?: never
+          placeholder_keys?: Json
+          product_category?: string | null
+          slide_index?: number
+          template_type?: string
+        }
+        Relationships: []
+      }
       my_products: {
         Row: {
           category: string | null

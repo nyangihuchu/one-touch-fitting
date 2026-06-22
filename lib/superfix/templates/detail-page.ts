@@ -279,7 +279,7 @@ export function renderSpecificationSection(data: DetailPageData): string {
 }
 
 // 외형 치수도는 renderSpecificationSection 우측 패널에 통합됨
-export function renderDimensionSection(_data: DetailPageData): string {
+export function renderDimensionSection(): string {
   return ''
 }
 
